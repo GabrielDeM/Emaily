@@ -27,6 +27,7 @@ passport.use(
 			// This callback URL needs to be absolute, so we can add keys on dev and prod files
 			// But we'll say to google to enable the Heroku Proxy
 			callbackURL: '/auth/google/callback',
+			// Say to Google to enable proxy
 			proxy: true
 		},
 		(accessToken, refreshToken, profile, done) => {
@@ -53,7 +54,8 @@ passport.use(
 		{
 			clientID: keys.githubClientID,
 			clientSecret: keys.githubClientSecret,
-			callbackURL: '/auth/github/callback'
+			callbackURL: '/auth/github/callback',
+			proxy: true
 		},
 		(accessToken, refreshToken, profile, done) => {
 			User.findOne({ githubId: profile.id }).then(existingUser => {
