@@ -8,5 +8,8 @@ module.exports = {
 	// Mango
 	mongoURI: process.env.MANGO_URI,
 	// Cookie
-	cookieKey: process.env.COOKIE_KEY
+	cookieKey: process.env.COOKIE_KEY,
+	// Stripe Keys
+	stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+	stripeSecretKey: process.env.STRIPE_SECRET_KEY
 };

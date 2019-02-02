@@ -13,7 +13,14 @@ module.exports = app => {
 		})
 	);
 
-	app.get('/auth/google/callback', passport.authenticate('google'));
+	app.get(
+		'/auth/google/callback',
+		passport.authenticate('google'),
+		// After passport authenticate the user thanks to the callback code, we redirect the user to the surveys
+		(req, res) => {
+			res.redirect('/surveys');
+		}
+	);
 
 	/*
 	 *
@@ -27,12 +34,18 @@ module.exports = app => {
 		})
 	);
 
-	app.get('/auth/github/callback', passport.authenticate('github'));
+	app.get(
+		'/auth/github/callback',
+		passport.authenticate('github'),
+		(req, res) => {
+			res.redirect('/surveys');
+		}
+	);
 
 	// Logout
 	app.get('/api/logout', (req, res) => {
 		req.logout();
-		res.send(req.user);
+		res.redirect('/');
 	});
 
 	// Route to see if user is logged in

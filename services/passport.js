@@ -30,20 +30,19 @@ passport.use(
 			// Say to Google to enable proxy
 			proxy: true
 		},
-		(accessToken, refreshToken, profile, done) => {
-			User.findOne({ googleId: profile.id }).then(existingUser => {
-				if (existingUser) {
-					// we already have a record with the given profile id
-					done(null, existingUser);
-				} else {
-					// we don't have a user record with this ID, make a new record
-					// Creation of a new Model Instance of a user on the users Collection
-					// The 'save()' function make that the new User will be save on our DB
-					new User({ googleId: profile.id })
-						.save()
-						.then(user => done(null, user));
-				}
-			});
+		async (accessToken, refreshToken, profile, done) => {
+			const existingUser = await User.findOne({ googleId: profile.id });
+
+			if (existingUser) {
+				// we already have a record with the given profile id
+				return done(null, existingUser);
+			}
+
+			// we don't have a user record with this ID, make a new record
+			// Creation of a new Model Instance of a user on the users Collection
+			// The 'save()' function make that the new User will be save on our DB
+			const user = await new User({ googleId: profile.id }).save();
+			done(null, user);
 		}
 	)
 );
@@ -57,16 +56,16 @@ passport.use(
 			callbackURL: '/auth/github/callback',
 			proxy: true
 		},
-		(accessToken, refreshToken, profile, done) => {
-			User.findOne({ githubId: profile.id }).then(existingUser => {
-				if (existingUser) {
-					done(null, existingUser);
-				} else {
-					new User({ githubId: profile.id })
-						.save()
-						.then(user => done(null, user));
-				}
-			});
+		async (accessToken, refreshToken, profile, done) => {
+			const existingUser = await User.findOne({ githubId: profile.id });
+
+			if (existingUser) {
+				done(null, existingUser);
+			} else {
+				const user = await new User({ githubId: profile.id }).save();
+
+				done(null, user);
+			}
 		}
 	)
 );
